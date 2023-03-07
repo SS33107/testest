@@ -1,0 +1,32 @@
+<launch>
+
+    <arg name="gripper"  default="false" />
+    <arg name="obstacle" default="false" />
+    <arg name="height_z" default="0.8"   />
+    <arg name="vision"   default="false" />
+    <arg name="robot_ip" />
+
+
+    <!-- ===================================================================
+        tm_bringup using reflexxes and publish using joint state publisher 
+    ===================================================================== 
+    <node name="tm_action_gripper" pkg="tm_reflexxes2" type="tm_action_gripper" output="screen" >
+        <param name="robot_ip" type="str"    value="$(arg robot_ip)"      />
+        <param name="obstacle" value="$(arg obstacle)" />
+        <param name="height_z" value="$(arg height_z)" />
+        <param name="vision"   value="$(arg vision)" />
+    </node>-->
+
+    <node pkg="tf" type="static_transform_publisher" name="gper_tf"  args=" 0       0      0.235  0 0 0 1 /tool0 /gper  100" />
+    <node pkg="tf" type="static_transform_publisher" name="h1_tf"    args="0.6     -0.036  0.88   0 0 0 1 /base  /h1    100" />
+    <node pkg="tf" type="static_transform_publisher" name="h2_tf"    args="0.0      -0.3   0.125  0 0 0 1 /h2  /h7    100" />
+    <node pkg="tf" type="static_transform_publisher" name="h3_tf"    args="0.0      0.0    0.25   0 0 0 1 /h3  /h2    100" />
+    <node pkg="tf" type="static_transform_publisher" name="h4_tf"    args="0.0      0.3    0.125  0 0 0 1 /h4  /h3    100" />
+    <node pkg="tf" type="static_transform_publisher" name="h5_tf"    args="0.0      0.3   -0.125  0 0 0 1 /h5  /h4    100" />
+    <node pkg="tf" type="static_transform_publisher" name="h6_tf"    args="0.0      0     -0.25   0 0 0 1 /h6  /h5    100" />
+    <node pkg="tf" type="static_transform_publisher" name="h7_tf"    args="0.0     -0.3   -0.125  0 0 0 1 /h1  /h6    100" />
+    <node pkg="tf" type="static_transform_publisher" name="gpper_tf"  args=" 0       0    -0.235  0 0 0 1 /gper /gpper  100" />
+
+
+</launch>
+

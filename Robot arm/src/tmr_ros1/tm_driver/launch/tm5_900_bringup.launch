@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!--
+  Techman robot tm5_900 launch.
+  Usage:
+    tm5_900_bringup.launch robot_ip:=<value>
+-->
+<launch>
+
+  <arg name="model" />
+  <arg name="stl_mesh" default="false" />
+  <param name="robot_description" command="xacro '$(find tm5_description)/urdf/tm5_900_robot.urdf.xacro' stl_mesh:=$(arg stl_mesh)"/>
+
+  <!-- launch robot state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+  <node name="tm_state_publisher" pkg="tm_driver" type="tm_state_publisher" />
+
+  <!-- launch tm_camera tf -->
+  <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="-0.00006286 0.0719933 0.0376066 0.00055 -0.000125 -0.00095 /tool0 /eye_link 100" />
+
+  <!-- robot_ip: IP-address of the robot's socket-messaging server -->
+  <arg name="prefix" default="" />
+  <arg name="robot_ip"  default="192.168.1.10"/>
+  <arg name="min_payload" default="0.0" />
+  <arg name="max_payload" default="4.0" />
+
+  <!-- robot model -->
+  <!--
+  <include file="$(find tm5_description)/launch/tm5_900_upload.launch">
+  </include>
+  -->
+
+  <!-- tm common -->
+  <include file="$(find tm_driver)/launch/tm_common.launch">
+    <arg name="prefix"  value="$(arg prefix)" />
+    <arg name="robot_ip" value="$(arg robot_ip)" />
+    <arg name="min_payload" value="$(arg min_payload)" />
+    <arg name="max_payload" value="$(arg max_payload)" />
+  </include>
+
+  <!-- Visualize gripper -->
+  <!-- <node pkg="tf" type="static_transform_publisher" name="gper"  args=" 0 0 0.222 0 0 0 1 /flange_link /gripper 100" />
+  <node pkg="tf" type="static_transform_publisher" name="gper_visual"  args=" 0 0 -0.222 0 0 0 1 /gripper /gper_visual 100" /> -->
+  <node pkg="tf" type="static_transform_publisher" name="gper_visual"  args=" 0 0 -0.22 0 0 0 1 /gripper_link /gper_visual 100" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d tm.rviz" required = "true" />
+
+</launch>

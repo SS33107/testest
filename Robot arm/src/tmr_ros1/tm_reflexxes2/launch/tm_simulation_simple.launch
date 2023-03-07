@@ -1,0 +1,19 @@
+<launch>
+
+    <arg name="model" />
+    <param name="robot_description" command="$(find xacro)/xacro.py $(find tm_description)/urdf/tm700_robot.urdf.xacro" />
+
+    <!-- launch robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  
+    <!-- launch tm_camera tf -->
+    <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="-0.00006286 0.0719933 0.0376066 0.00055 -0.000125 -0.00095 /tool0 /eye_link 100" />
+  
+  
+    <!--robot visualization using rviz-->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d sim.rviz" required = "true" />
+
+    <!-- tm_bringup using reflexxes and publish using joint state publisher -->
+    <node name="tm_simulation_node" pkg="tm_reflexxes2" type="tm_sim_simple" output="screen" />
+
+</launch>

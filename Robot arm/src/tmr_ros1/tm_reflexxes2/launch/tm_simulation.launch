@@ -1,0 +1,79 @@
+<launch>
+
+    <arg name="gripper"  default="false" />
+    <arg name="obstacle" default="false" />
+    <arg name="height_z" default="0.8"   />
+    <arg name="vision"   default="false" />
+
+    <!-- =======================
+    launch robot state publisher 
+    ========================= -->
+    <arg name="model" />
+    <param name="robot_description" command="$(find xacro)/xacro.py $(find tm_reflexxes2)/urdf/tm700_wall.xacro" />
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+    <!--robot visualization using rviz-->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d sim.rviz" required = "true" />
+  
+
+    <!-- launch tm_camera tf -->
+    <node pkg="tf" type="static_transform_publisher" name="camera_tf" args="-0.00006286 0.0719933 0.0376066 0.00055 -0.000125 -0.00095 /tool0 /eye_link 100" />
+
+
+    <!-- ===================================================================
+        tm_bringup using reflexxes and publish using joint state publisher 
+    ===================================================================== -->
+    <group if="$(arg gripper)"> <!-- with gripper -->
+        <node name="tm_simulation_node" pkg="tm_reflexxes2" type="tm_sim_gripper" output="screen" >
+            <param name="obstacle" value="$(arg obstacle)" />
+            <param name="height_z" value="$(arg height_z)" />
+            <param name="vision"   value="$(arg vision)" />
+        </node>
+
+        <node pkg="tf" type="static_transform_publisher" name="us_tf"    args="0.4087   0.1778  0.8   0 0 0 1 /base /us     100" />
+        <node pkg="tf" type="static_transform_publisher" name="u1_tf"    args=" 0       0       0     0 0 0 1 /us   /u3       100" />
+        <node pkg="tf" type="static_transform_publisher" name="u3_tf"    args=" -0.6859 0.0     0.0   0 0 0 1 /u3   /u2       100" />
+        <node pkg="tf" type="static_transform_publisher" name="u2_tf"    args=" 0      -0.4294  0.0   0 0 0 1 /u2   /u1       100" />
+        <node pkg="tf" type="static_transform_publisher" name="u4_tf"    args=" 0.6859       0  0.0   0 0 0 1 /u1   /u4       100" />
+        <node pkg="tf" type="static_transform_publisher" name="start_tf" args=" 0.4087 -0.3592  0.8   0 0 0 1 /base /start  100" />
+        <node pkg="tf" type="static_transform_publisher" name="cc_tf"    args="-0.35    0.1    0.234  0 0 0 1 /base  /cc    100" />
+        <node pkg="tf" type="static_transform_publisher" name="gper_tf"  args=" 0       0      0.235  0 0 0 1 /tool0 /gripper_link  100" />
+        <node pkg="tf" type="static_transform_publisher" name="h1_tf"    args="0.6     -0.036  0.88   0 0 0 1 /base  /h1    100" />
+        <node pkg="tf" type="static_transform_publisher" name="h2_tf"    args="0.0      -0.3   0.125  0 0 0 1 /h2  /h7    100" />
+        <node pkg="tf" type="static_transform_publisher" name="h3_tf"    args="0.0      0.0    0.25   0 0 0 1 /h3  /h2    100" />
+        <node pkg="tf" type="static_transform_publisher" name="h4_tf"    args="0.0      0.3    0.125  0 0 0 1 /h4  /h3    100" />
+        <node pkg="tf" type="static_transform_publisher" name="h5_tf"    args="0.0      0.3   -0.125  0 0 0 1 /h5  /h4    100" />
+        <node pkg="tf" type="static_transform_publisher" name="h6_tf"    args="0.0      0     -0.25   0 0 0 1 /h6  /h5    100" />
+        <node pkg="tf" type="static_transform_publisher" name="h7_tf"    args="0.0     -0.3   -0.125  0 0 0 1 /h1  /h6    100" />
+        <node pkg="tf" type="static_transform_publisher" name="gpper_tf"  args=" 0       0    -0.235  0 0 0 1 /gripper_link /gpper  100" />
+        <node pkg="tf" type="static_transform_publisher" name="obs_tf"  args="0.3277    -0.0951     0.1648  0 0 0 1 /base /obs  100" />
+        <node pkg="tf" type="static_transform_publisher" name="repob_tf"  args="0.6        0.414      0.63  0 0 0 1 /base /repob  100" />
+
+        <!--<node name="tf_endEffector_node" pkg="tm_reflexxes2" type="trajectory_visualize.py" />-->
+
+
+    </group>
+
+    <group unless="$(arg gripper)"> <!--without gripper -->
+        <node name="tm_simulation_node" pkg="tm_reflexxes2" type="tm_sim" output="screen" >
+            <param name="obstacle" value="$(arg obstacle)" />
+            <param name="height_z" value="$(arg height_z)" />
+        </node>
+
+        <node pkg="tf" type="static_transform_publisher" name="s1_tf"    args="-0.1372 -0.1222 0.55 0 0 0 1 /base /s1    100" />
+        <node pkg="tf" type="static_transform_publisher" name="s2_tf"    args="-0.2172  0.16 0.55 0 0 0 1 /base /s2    100" />
+        <node pkg="tf" type="static_transform_publisher" name="s3_tf"    args=" 0.4259  0.16 0.55 0 0 0 1 /base /s3    100" />
+        <node pkg="tf" type="static_transform_publisher" name="start_tf" args=" 0.4259 -0.1222 0.55 0 0 0 1 /base /start 100" />
+        <node pkg="tf" type="static_transform_publisher" name="cc_tf"    args="-0.4     0.1    0.234  0 0 0 1 /base /cc    100" />
+    </group>
+
+</launch>
+
+<!--
+<node pkg="tf" type="static_transform_publisher" name="h1_tf"    args="0.6     -0.036  0.88   0 0 0 1 /base  /h1    100" />
+<node pkg="tf" type="static_transform_publisher" name="h2_tf"    args="0.6      0.264  0.755  0 0 0 1 /base  /h2    100" />
+<node pkg="tf" type="static_transform_publisher" name="h3_tf"    args="0.6      0.264  0.505  0 0 0 1 /base  /h3    100" />
+<node pkg="tf" type="static_transform_publisher" name="h4_tf"    args="0.6     -0.036  0.38   0 0 0 1 /base  /h4    100" />
+<node pkg="tf" type="static_transform_publisher" name="h5_tf"    args="0.6     -0.336  0.505  0 0 0 1 /base  /h5    100" />
+<node pkg="tf" type="static_transform_publisher" name="h6_tf"    args="0.6     -0.336  0.755  0 0 0 1 /base  /h6    100" />
+-->

@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+
+<robot name="tm700_demo" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <!-- tm700 -->
+  <xacro:include filename="$(find tm_description)/urdf/tm700.urdf.xacro" />
+  <!-- arm -->
+  <xacro:tm700_robot prefix="" joint_limited="true"/>
+  
+  <link name="world" />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+  
+ <!--
+ ======================   wall behind tm5 ========================
+ --> 
+  <link name="floor">  <!--- 0.4 0.064 0.234 0 0 0 /base /cc-->
+    <visual>
+      <geometry>
+	<box size="0.01 0.9 0.9"/>  
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> <!--<origin xyz="0.0 0.0 -0.02"/>-->
+      <material name="FloorWood">
+        <color rgba="1.0 0.87 0.68 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+	<box size="0.01 0.9 0.9"/>
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> <!--<origin xyz="0.0 0.0 -0.02"/>-->
+    </collision>
+  </link>
+
+  <joint name="world_to_floor" type="fixed">
+    <parent link="world" />
+    <child link="floor" />
+    <origin xyz="-0.35 0.064 0.45" rpy="0.0 0.0 0.0" />
+  </joint>
+
+
+ <!--
+ ======================   table under tm5 ========================
+ -->
+  <link name="table">  <!--- 0.4 0.064 0.234 0 0 0 /base /cc-->
+    <visual>
+      <geometry>
+  <box size="0.9 0.9 0.04"/>  
+      </geometry>
+      <origin xyz="0.0 0.0 -0.02"/> <!--<origin xyz="0.0 0.0 -0.02"/>-->
+      <material name="Black">
+        <color rgba="0.0 0.0 0.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+  <box size="0.9 0.9 0.04"/>
+      </geometry>
+      <origin xyz="0.0 0.0 -0.02"/> <!--<origin xyz="0.0 0.0 -0.02"/>-->
+    </collision>
+  </link>
+
+  <joint name="world_to_table" type="fixed">
+    <parent link="world" />
+    <child link="table" />
+    <origin xyz="0 0 0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+
+ <!--
+ ======================   box in front of tm5 ========================
+ -->
+  <link name="box_length1">  
+    <visual>
+      <geometry>
+  <box size="0.01 0.611 0.311"/>  
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> 
+      <material name="FloorWood">
+        <color rgba="1.0 0.87 0.68 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+  <box size="0.01 0.611 0.311"/>
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> 
+    </collision>
+  </link>
+  
+  <joint name="box_length1" type="fixed">
+    <parent link="world" />
+    <child link="box_length1" />
+    <origin xyz="0.2365 0 0.1555" rpy="0.0 0.0 0.0" />
+  </joint>
+
+ <!--
+ ======================   box in front of tm5 ========================
+ -->
+  <link name="box_length2">  
+    <visual>
+      <geometry>
+  <box size="0.01 0.611 0.311"/>  
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> 
+      <material name="FloorWood">
+        <color rgba="1.0 0.87 0.68 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+  <box size="0.01 0.611 0.311"/>
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> 
+    </collision>
+  </link>
+  
+  <joint name="box_length2" type="fixed">
+    <parent link="world" />
+    <child link="box_length2" />
+    <origin xyz="0.6635 0 0.1555" rpy="0.0 0.0 0.0" />
+  </joint>
+
+   <!--
+ ======================   box in front of tm5 ========================
+ -->
+<link name="box_width1">  
+    <visual>
+      <geometry>
+  <box size="0.427 0.01 0.311"/>  
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> 
+      <material name="FloorWood">
+        <color rgba="1.0 0.87 0.68 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+  <box size="0.427 0.01 0.311"/>
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> 
+    </collision>
+  </link>
+  
+  <joint name="box_width1" type="fixed">
+    <parent link="world" />
+    <child link="box_width1" />
+    <origin xyz="0.45 -0.3055 0.1555" rpy="0.0 0.0 0.0" />
+  </joint>
+
+   <!--
+ ======================   box in front of tm5 ========================
+ -->
+<link name="box_width2">  
+    <visual>
+      <geometry>
+  <box size="0.427 0.01 0.311"/>  
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> 
+      <material name="FloorWood">
+        <color rgba="1.0 0.87 0.68 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+  <box size="0.427 0.01 0.311"/>
+      </geometry>
+      <origin xyz="0.0 0.0 0.0"/> 
+    </collision>
+  </link>
+  
+  <joint name="box_width2" type="fixed">
+    <parent link="world" />
+    <child link="box_width2" />
+    <origin xyz="0.45 0.3055 0.1555" rpy="0.0 0.0 0.0" />
+  </joint>
+
+</robot>

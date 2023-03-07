@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="tmr_gazebo" params="ns prefix">
+
+    <gazebo reference="${prefix}link_1">
+      <gravity>0</gravity>
+      <turnGravityOff>1</turnGravityOff>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="${prefix}link_2">
+      <gravity>0</gravity>
+      <turnGravityOff>1</turnGravityOff>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="${prefix}link_3">
+      <gravity>0</gravity>
+      <turnGravityOff>1</turnGravityOff>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="${prefix}link_4">
+      <gravity>0</gravity>
+      <turnGravityOff>1</turnGravityOff>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="${prefix}link_5">
+      <gravity>0</gravity>
+      <turnGravityOff>1</turnGravityOff>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+    <gazebo reference="${prefix}link_6">
+      <gravity>0</gravity>
+      <turnGravityOff>1</turnGravityOff>
+      <selfCollide>true</selfCollide>
+    </gazebo>
+
+    <gazebo>
+      <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+        <robotNamespace>/${ns}</robotNamespace>
+        <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      </plugin>
+    </gazebo>
+    
+    <gazebo reference="force_torque_sensor_joint">
+      <provideFeedback>true</provideFeedback>
+    </gazebo>
+    <gazebo>
+      <plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+        <updateRate>30.0</updateRate>
+        <topicName>ft_sensor_topic</topicName>
+        <jointName>force_torque_sensor_joint</jointName>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.003</stddev> <!-- change this to simulate noise --> 
+        </noise>
+      </plugin>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>

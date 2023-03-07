@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot>
+
+<!-- force torquue sensor -->
+<gazebo reference="force_torque_sensor_link">
+  <sensor name="force_torque" type="force_torque">
+    <update_rate>30</update_rate>
+    <plugin name="force_controller" filename="libgazebo_ros_force.so">
+      <alwaysOn>true</alwaysOn>
+    </plugin>
+  </sensor>
+</gazebo>
+</robot>
