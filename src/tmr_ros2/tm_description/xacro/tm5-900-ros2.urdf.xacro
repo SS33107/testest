@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="tm5-900">
+
+    <xacro:arg name="ns" default="" />
+    <xacro:arg name="prefix" default="" />
+    <xacro:arg name="color" default="none" />
+    <xacro:arg name="namespace" default=""/>
+    <xacro:arg name="trans_hw_iface" default="hardware_interface/PositionJointInterface" />
+
+
+  <!-- tm5-900 -->
+  <!-- If the user want to use newly generated named robot description file as user_defined.urdf.xacro, -->
+  <!-- you must modify 'macro.tm5-900-nominal.urdf.xacro' to 'user_defined.urdf.xacro'  -->
+  
+  <xacro:include filename="$(find tm_description)/xacro/macro.tm5-900-nominal-ros2.urdf.xacro" />
+   <xacro:include filename="$(find tm_description)/xacro/macro.transmission.xacro" />
+  <xacro:include filename="$(find tm_description)/xacro/macro.materials.xacro" />
+  <xacro:include filename="$(find tm_description)/xacro/macro.internal_config.xacro" />
+
+  
+
+
+  
+
+
+  <!--  -->
+  <!-- <xacro:tmr_gazebo ns="$(arg ns)" prefix="$(arg prefix)" /> -->
+  <!-- <xacro:tmr_transmission prefix="$(arg prefix)" hw_iface="$(arg trans_hw_iface)" /> -->
+  <!-- <xacro:tmr_materials/> -->
+
+
+  <!-- Arm -->
+  <xacro:property name="color" value="$(arg color)"/>
+  <xacro:if value="${color == 'none'}">
+    <xacro:tm5-900 ns="$(arg ns)" prefix="$(arg prefix)" />
+  </xacro:if>
+
+
+  <!-- Arm.color.stl -->
+  <!-- <xacro:unless value="${color == 'none'}">
+    <xacro:tm5-900 ns="$(arg ns)" prefix="$(arg prefix)" color="${color}" format="stl" />
+  </xacro:unless> -->
+  <gazebo reference="link_0">
+    <material>Gazebo/LightGrey</material>
+  </gazebo>
+  <gazebo reference="link_1">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <gazebo reference="link_2">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <gazebo reference="link_3">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <gazebo reference="link_4">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <gazebo reference="link_5">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+  <gazebo reference="link_6">
+    <material>Gazebo/LightGrey</material>
+</gazebo>
+  <link name="world" /> 
+  <joint name="world_joint" type="fixed">
+    <parent link="world" />
+    <child link="base" />
+    <origin xyz="0 0 0.62" rpy="0 0 0" />
+  </joint>
+  <!--LinkDescription-->
+  <link name="force_torque_sensor_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.041" length="0.0254"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="black" />
+    </visual>
+    <collision>
+      <pose>-0.38 0.7 0.3 0 0 0</pose>
+      <geometry>
+        <cylinder radius="0.041" length="0.0254"/>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e15</kp>
+            <kd>1e13</kd>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0 0 0" />
+      <mass value="0.1" />
+      <inertia ixx="0.041" ixy="0.000000" ixz="0.000000" iyy="0.041" iyz="0.000000" izz="0.0254" />
+    </inertial>
+  </link>
+ <joint name="force_torque_sensor_joint" type="revolute">
+    <origin xyz="0 0 0.011" rpy="0 0 0" />
+    <parent link="link_6" />
+    <child link="force_torque_sensor_link" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0" upper="0" effort="100" velocity="100" />
+    <physics>
+      <ode>
+        <provide_feedback>false</provide_feedback>
+      </ode>
+    </physics>
+  </joint>
+ <gazebo reference="force_torque_sensor_link">
+  <material>Gazebo/Black</material>
+ </gazebo> 
+
+ <!--LinkDescription-->
+  <link name="tool_link">
+    <visual>
+      <geometry>
+        <!-- <box size="0.1 0.1 0.1"/> -->
+        <cylinder radius="0.01" length="0.08"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="black" />
+    </visual>
+    <collision name='collision'>
+      <pose>0 0 0 0 0 0 </pose>
+      <geometry>
+        <cylinder radius="0.01" length="0.08"/>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e15</kp>
+            <kd>1e13</kd>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.0 0.000000 0.000000" />
+      <mass value="0.1" />
+      <inertia ixx="0.05" ixy="0.000000" ixz="0.000000" iyy="0.05" iyz="0.000000" izz="0.08" />
+    </inertial>
+  </link>
+ <joint name="tool_joint" type="revolute">
+    <origin xyz="0 0 0.0527" rpy="0 0 0" />
+    <parent link="force_torque_sensor_link" />
+    <child link="tool_link" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0" upper="0" effort="100" velocity="100" />
+  </joint>
+ <gazebo reference="tool_link">
+  <material>Gazebo/lightgrey</material>
+ </gazebo> 
+
+ <link name="tool2_link">
+    <visual>
+      <geometry>
+        <cylinder radius="0.015" length="0.02"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+      <material name="black" />
+    </visual>
+    <collision name='collision'>
+      <pose>0 0 0 0 0 0 </pose>
+      <geometry>
+        <cylinder radius="0.015" length="0.02"/>
+      </geometry>
+      <surface>
+        <contact>
+          <ode>
+            <kp>1e15</kp>
+            <kd>1e13</kd>
+          </ode>
+        </contact>
+      </surface>
+    </collision>
+    <inertial>
+      <origin rpy="0.000000 0.000000 0.000000" xyz="0.0 0.000000 0.000000" />
+      <mass value="0.1" />
+      <inertia ixx="0.02" ixy="0.000000" ixz="0.000000" iyy="0.02" iyz="0.000000" izz="0.02" />
+    </inertial>
+  </link>
+ <joint name="tool2_joint" type="revolute">
+    <origin xyz="0 0 0.05" rpy="0 0 0" />
+    <parent link="tool_link" />
+    <child link="tool2_link" />
+    <axis xyz="0 0 1" />
+    <limit lower="-0" upper="0" effort="100" velocity="100" />
+  </joint>
+ <gazebo reference="tool2_link">
+  <material>Gazebo/Black</material>
+ </gazebo> 
+ <gazebo reference="force_torque_sensor_link">
+    <gravity>0</gravity>
+    <turnGravityOff>1</turnGravityOff>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+   <gazebo reference="tool2_link">
+    <gravity>0</gravity>
+    <turnGravityOff>1</turnGravityOff>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+   <gazebo reference="tool_link">
+    <gravity>0</gravity>
+    <turnGravityOff>1</turnGravityOff>
+    <selfCollide>true</selfCollide>
+  </gazebo>
+
+
+  
+</robot>
